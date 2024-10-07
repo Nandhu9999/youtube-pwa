@@ -11,7 +11,7 @@ function HistoryPage() {
 
             </div>
             <hr className="my-4" />
-            <div className="mt-4 w-11/12 md:w-1/2 text-center text-gray-500 flex flex-col gap-1">
+            <div className="w-11/12 md:w-1/2 text-center text-gray-500 flex flex-col gap-1">
                 {history.length === 0 ? <>{"No Items found."}</> : <>
                     {history.map(item => <YoutubeCard key={item} videoId={item} />)}</>}
             </div>

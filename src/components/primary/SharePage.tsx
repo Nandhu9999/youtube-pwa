@@ -28,7 +28,7 @@ export default function SharePage() {
             <div className="mt-4">
                 {data?.title ? (
                     <>
-                        <h1 className="text-xl">Shared Content</h1>
+                        <h1 className="text-xl text-gray-500">Shared Content</h1>
                         <div>
                             <h2>{data.title}</h2>
                             <p>{data.text}</p>
