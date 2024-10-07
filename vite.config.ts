@@ -6,7 +6,7 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
   registerType: "autoUpdate",
   includeAssets: ["favicon.ico", "apple-touch-icon.png"],
   manifest: {
-    name: "Youtube PWA",
+    name: "Youtube",
     short_name: "YT",
     description: "Youtube PWA",
     icons: [
