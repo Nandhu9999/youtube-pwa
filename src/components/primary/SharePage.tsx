@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useYoutubeStore } from "../../store/YoutubeStore";
+import { useNavigate } from "react-router-dom";
 
 export default function SharePage() {
     const [data, setData] = useState<{
@@ -6,6 +8,7 @@ export default function SharePage() {
         text: string;
         url: string;
     } | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
@@ -17,6 +20,12 @@ export default function SharePage() {
             text: text,
             url: url,
         });
+        const potentialVideoId = useYoutubeStore.getState()._extractYouTubeVideoId(text);
+        if (potentialVideoId) {
+            useYoutubeStore.getState().addToHistory(potentialVideoId)
+            useYoutubeStore.getState().setVideoId(potentialVideoId)
+            navigate("/")
+        };
     }, []);
 
     console.log(data)
@@ -25,10 +34,10 @@ export default function SharePage() {
         <div className="flex h-full w-full flex-col items-center justify-center">
             <div className="text-3xl font-bold">Share Here</div>
 
-            <div className="mt-4">
+            <div className="mt-4 px-2">
                 {data?.title ? (
                     <>
-                        <h1 className="font-bold">- Shared Content -</h1>
+                        <h1 className="font-bold text-center">- Shared Content -</h1>
                         <div>
                             <h2>{data.title}</h2>
                             <p>{data.text}</p>

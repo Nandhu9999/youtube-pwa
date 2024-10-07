@@ -21,7 +21,7 @@ const manifestForPlugin: Partial<VitePWAOptions> = {
         type: "image/png",
       },
     ],
-    theme_color: "#ff0000",
+    theme_color: "#000000",
     background_color: "#ffffff",
     display: "standalone",
     scope: "/",
