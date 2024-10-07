@@ -9,6 +9,7 @@ import HomePage from './components/primary/HomePage.tsx';
 import SharePage from './components/primary/SharePage.tsx';
 import NotFoundPage from './components/primary/NotFoundPage.tsx';
 import HistoryPage from './components/primary/HistoryPage.tsx';
+import PlaylistPage from './components/primary/PlaylistPage.tsx';
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,12 @@ const router = createBrowserRouter([
         path: "/",
         element: (
           <HomePage />
+        ),
+      },
+      {
+        path: "/playlist",
+        element: (
+          <PlaylistPage />
         ),
       },
       {

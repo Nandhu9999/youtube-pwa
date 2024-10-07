@@ -1,30 +1,36 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useYoutubeStore } from "../../store/YoutubeStore"
 import YouTube from "react-youtube"
+import VideoInput from "../common/VideoInput"
 
 function HomePage() {
+    const [mode, setMode] = useState<"direct" | "playlist">("direct")
+
     const videoId = useYoutubeStore((state) => state.videoId)
-    const [link, setLink] = useState("")
-    function submitLink(e: any) {
-        e.preventDefault()
-        useYoutubeStore.getState().setVideo(link)
-    }
+    const playlist = useYoutubeStore((state) => state.playlist)
+
     return (
         <div className="flex h-full w-full flex-col items-center justify-center overflow-y-auto pb-4">
             {
                 videoId
-                    ? <VideoPlayer videoId={videoId} />
+                    ? <VideoPlayer videoIds={mode === "direct"
+                        ? [videoId]
+                        : mode === "playlist"
+                            ? playlist
+                            : []
+                    }
+                    />
                     : <GeneralInfo />
             }
             <div className="w-1/2 text-center text-gray-500 gap-2 flex flex-col items-center">
                 <span>
                     {"Insert a youtube link below to play the video."}
                 </span>
-                <form onSubmit={submitLink} className="flex gap-2 items-center">
-
-                    <input value={link} onChange={(e) => setLink(e.target.value)} type="search" placeholder={"https://youtube.com/v?=xxx"} className="px-2 py-1 rounded-lg border-2 border-brand-main outline-none focus:ring-2 ring-brand-main ring-offset-2 max-w-[300px]" />
-                    {link !== "" && <button type="submit" className="p-1.5 border-2 border-brand-main aspect-square rounded-lg grid place-content-center outline-none active:scale-95 focus:ring-2 ring-brand-main ring-offset-2">🔍</button>}
-                </form>
+                <label>
+                    Use Playlist?
+                    <input type="checkbox" onChange={(e: any) => setMode(e.target.checked ? "playlist" : "direct")} className="mx-2 accent-red-500" />
+                </label>
+                <VideoInput mode={"direct"} />
             </div>
         </div>
     )
@@ -42,18 +48,64 @@ function GeneralInfo() {
 }
 
 type VideoPlayerProps = {
-    videoId: string;
-}
-function VideoPlayer({ videoId }: VideoPlayerProps) {
+    videoIds: string[];
+};
+
+function VideoPlayer({ videoIds }: VideoPlayerProps) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const playerRef = useRef<any>(null);
+
+    const handleVideoEnd = () => {
+        if (currentIndex < videoIds.length - 1) {
+            setCurrentIndex((prevIndex) => prevIndex + 1); // Go to the next video
+        } else {
+            setCurrentIndex(0); // Optionally loop back to the first video
+        }
+    };
+
+    useEffect(() => {
+        const handleVisibilityChange = () => {
+            if (document.visibilityState === "visible" && playerRef.current) {
+                // When the page becomes visible again, resume the video if paused
+                const playerState = playerRef.current.getPlayerState();
+                if (playerState === window?.YT.PlayerState.PAUSED) {
+                    playerRef.current.playVideo(); // Resume video
+                }
+            }
+        };
+
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return () => {
+            document.removeEventListener("visibilitychange", handleVisibilityChange);
+        };
+    }, []);
+
+    useEffect(() => {
+        // If you want the next video to automatically play when changing index
+        if (playerRef.current) {
+            playerRef.current.playVideo();
+        }
+    }, [currentIndex]);
+
     return (
         <div className="w-full p-2">
-            <YouTube videoId={videoId} opts={{
-                height: "100%",
-                width: "100%",
-                playerVars: {
-                    autoplay: 1,
-                }
-            }} className="w-full aspect-video rounded" />
+            <YouTube
+                videoId={videoIds[currentIndex]}
+                opts={{
+                    height: "100%",
+                    width: "100%",
+                    playerVars: {
+                        autoplay: 1,
+                        playsinline: 1,
+                    },
+                }}
+                className="w-full aspect-video rounded"
+                onReady={(event: any) => {
+                    playerRef.current = event.target;
+                }}
+                onEnd={handleVideoEnd}
+            />
         </div>
     );
 }

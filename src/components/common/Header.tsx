@@ -12,6 +12,14 @@ export default function Header() {
                 Home
             </NavLink>
             <NavLink
+                to="/playlist"
+                className={({ isActive }) =>
+                    isActive ? "text-brand-main underline" : "text-gray-700"
+                }
+            >
+                Playlist
+            </NavLink>
+            <NavLink
                 to="/history"
                 className={({ isActive }) =>
                     isActive ? "text-brand-main underline" : "text-gray-700"
