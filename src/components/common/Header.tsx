@@ -19,14 +19,14 @@ export default function Header() {
             >
                 History
             </NavLink>
-            {/* <NavLink
-        to="/share"
-        className={({ isActive }) =>
-          isActive ? "text-blue-500 underline" : "text-gray-700"
-        }
-      >
-        Share
-      </NavLink> */}
+            <NavLink
+                to="/share"
+                className={({ isActive }) =>
+                    isActive ? "text-brand-main underline" : "text-gray-700"
+                }
+            >
+                Share
+            </NavLink>
         </nav>
     );
 }

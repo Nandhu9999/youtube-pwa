@@ -10,14 +10,13 @@ function HomePage() {
         useYoutubeStore.getState().setVideo(link)
     }
     return (
-        <div className="flex h-full w-full flex-col items-center justify-center">
+        <div className="flex h-full w-full flex-col items-center justify-center overflow-y-auto pb-4">
             {
                 videoId
                     ? <VideoPlayer videoId={videoId} />
                     : <GeneralInfo />
             }
-            <hr className="my-4" />
-            <div className="mt-4 w-1/2 text-center text-gray-500 gap-2 flex flex-col items-center">
+            <div className="w-1/2 text-center text-gray-500 gap-2 flex flex-col items-center">
                 <span>
                     {"Insert a youtube link below to play the video."}
                 </span>
@@ -47,7 +46,7 @@ type VideoPlayerProps = {
 }
 function VideoPlayer({ videoId }: VideoPlayerProps) {
     return (
-        <div className="w-full overflow-hidden p-2">
+        <div className="w-full p-2">
             <YouTube videoId={videoId} opts={{
                 height: "100%",
                 width: "100%",

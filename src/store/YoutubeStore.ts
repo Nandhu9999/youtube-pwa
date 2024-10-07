@@ -44,6 +44,7 @@ export const useYoutubeStore = create<YoutubeStore>((set, get) => ({
   },
   removeFromHistory: (videoId) => {
     set({ history: get().history.filter((item) => item !== videoId) });
+    localStorage.setItem("history", JSON.stringify(get().history));
   },
 
   _extractYouTubeVideoId: (url) => {

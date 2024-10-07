@@ -9,13 +9,13 @@ export default function SharePage() {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(window.location.search);
-        const title = queryParams.get("title");
-        const text = queryParams.get("text");
-        // const url = queryParams.get("url");
+        const title = queryParams.get("title") || "";
+        const text = queryParams.get("text") || "";
+        const url = queryParams.get("url") || "";
         setData({
-            title: title || "",
-            text: "",
-            url: text || "",
+            title: title,
+            text: text,
+            url: url,
         });
     }, []);
 
@@ -23,7 +23,7 @@ export default function SharePage() {
 
     return (
         <div className="flex h-full w-full flex-col items-center justify-center">
-            <div className="text-3xl font-bold">SharePage</div>
+            <div className="text-3xl font-bold">Share Here</div>
 
             <div className="mt-4">
                 {data?.title ? (
@@ -32,7 +32,7 @@ export default function SharePage() {
                         <div>
                             <h2>{data.title}</h2>
                             <p>{data.text}</p>
-                            <a href={data.url}>{data.url}</a>
+                            <p>{data.url}</p>
                         </div>
                     </>
                 ) : (
