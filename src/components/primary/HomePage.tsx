@@ -9,11 +9,12 @@ function HomePage() {
         e.preventDefault()
         useYoutubeStore.getState().setVideo(link)
     }
-
     return (
         <div className="flex h-full w-full flex-col items-center justify-center">
             {
-                videoId ? <VideoPlayer videoId={videoId} /> : <GeneralInfo />
+                videoId
+                    ? <VideoPlayer videoId={videoId} />
+                    : <GeneralInfo />
             }
             <hr className="my-4" />
             <div className="mt-4 w-1/2 text-center text-gray-500 gap-2 flex flex-col items-center">
@@ -46,9 +47,15 @@ type VideoPlayerProps = {
 }
 function VideoPlayer({ videoId }: VideoPlayerProps) {
     return (
-        <>
-            <YouTube videoId={videoId} />
-        </>
+        <div className="w-full overflow-hidden p-2">
+            <YouTube videoId={videoId} opts={{
+                height: "100%",
+                width: "100%",
+                playerVars: {
+                    autoplay: 1,
+                }
+            }} className="w-full aspect-video rounded" />
+        </div>
     );
 }
 

@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useYoutubeStore } from "../../store/YoutubeStore"
 
 function HistoryPage() {
@@ -10,7 +11,7 @@ function HistoryPage() {
 
             </div>
             <hr className="my-4" />
-            <div className="mt-4 w-1/2 text-center text-gray-500">
+            <div className="mt-4 w-11/12 md:w-1/2 text-center text-gray-500">
                 {history.length === 0 ? <>{"No Items found."}</> : <>
                     {history.map(item => <YoutubeCard key={item} videoId={item} />)}</>}
             </div>
@@ -22,17 +23,19 @@ type YoutubeCardProps = {
     videoId: string;
 }
 function YoutubeCard({ videoId }: YoutubeCardProps) {
+    const navigate = useNavigate();
     function watchAgain() {
-        useYoutubeStore.getState().setVideoId(videoId)
+        console.log("playing", videoId)
+        useYoutubeStore.getState().setVideoId(videoId);
+        navigate("/")
     }
     function removeVideo() {
         useYoutubeStore.getState().removeFromHistory(videoId)
     }
 
-    return (<div className="w-full h-16 rounded-lg p-2 bg-black/50 text-white">
+    return (<div onClick={watchAgain} className="cursor-pointer w-full h-16 rounded-lg p-2 bg-black/50 text-white">
         <div>
-
-            <span onClick={watchAgain} className="font-bold">Video ID:</span>{videoId}
+            <span className="font-bold">Video ID:</span>{" " + videoId}
         </div>
         <div className="flex flex-row-reverse flex-start w-full">
             <button onClick={removeVideo}>🗑️</button>
