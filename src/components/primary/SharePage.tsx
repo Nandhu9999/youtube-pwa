@@ -20,19 +20,29 @@ export default function SharePage() {
             text: text,
             url: url,
         });
-        const potentialVideoId = useYoutubeStore.getState()._extractYouTubeVideoId(text);
-        if (potentialVideoId) {
-            useYoutubeStore.getState().addToHistory(potentialVideoId)
-            useYoutubeStore.getState().setVideoId(potentialVideoId)
-            navigate("/")
-        };
     }, []);
 
-    console.log(data)
+    function playDirectly() {
+        if (data == null || data.text == "") return;
+        const potentialVideoId = useYoutubeStore.getState()._extractYouTubeVideoId(data.text);
+        if (!potentialVideoId) return
+        useYoutubeStore.getState().addToHistory(potentialVideoId)
+        useYoutubeStore.getState().setVideoId(potentialVideoId)
+        navigate("/")
+    }
+    function addToPlaylist() {
+        if (data == null || data.text == "") return;
+        const potentialVideoId = useYoutubeStore.getState()._extractYouTubeVideoId(data.text);
+        if (!potentialVideoId) return
+        useYoutubeStore.getState().addToPlaylist(potentialVideoId)
+        navigate("/")
+    }
+
+
 
     return (
         <div className="flex h-full w-full flex-col items-center justify-center">
-            <div className="text-3xl font-bold">Share Here</div>
+            <div className="text-3xl font-bold">Share Here!</div>
 
             <div className="mt-4 px-2">
                 {data?.title ? (
@@ -42,6 +52,10 @@ export default function SharePage() {
                             <h2>{data.title}</h2>
                             <p>{data.text}</p>
                             <p>{data.url}</p>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <button onClick={playDirectly}>Play Directy</button>
+                            <button onClick={addToPlaylist}>Add To Playlist</button>
                         </div>
                     </>
                 ) : (

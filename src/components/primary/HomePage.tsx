@@ -64,24 +64,6 @@ function VideoPlayer({ videoIds }: VideoPlayerProps) {
     };
 
     useEffect(() => {
-        const handleVisibilityChange = () => {
-            if (document.visibilityState === "visible" && playerRef.current) {
-                // When the page becomes visible again, resume the video if paused
-                const playerState = playerRef.current.getPlayerState();
-                if (playerState === window?.YT.PlayerState.PAUSED) {
-                    playerRef.current.playVideo(); // Resume video
-                }
-            }
-        };
-
-        document.addEventListener("visibilitychange", handleVisibilityChange);
-
-        return () => {
-            document.removeEventListener("visibilitychange", handleVisibilityChange);
-        };
-    }, []);
-
-    useEffect(() => {
         // If you want the next video to automatically play when changing index
         if (playerRef.current) {
             playerRef.current.playVideo();
