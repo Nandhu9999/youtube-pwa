@@ -14,12 +14,13 @@ type YoutubeStore = {
   removeFromPlaylist: (videoId: string) => void;
 
   _extractYouTubeVideoId: (videoUrl: string) => string | null;
+  _getYouTubeMetaData: (videoId: string) => void;
 };
 
 export const useYoutubeStore = create<YoutubeStore>((set, get) => ({
   videoId: null,
   history: JSON.parse(localStorage.getItem("history") || "[]"),
-  playlist: [],
+  playlist: JSON.parse(localStorage.getItem("playlist") || "[]"),
 
   setVideoId: (videoId) => set({ videoId }),
   setVideo: (_) => {
@@ -63,9 +64,11 @@ export const useYoutubeStore = create<YoutubeStore>((set, get) => ({
     }
 
     set({ playlist: newPlaylist });
+    localStorage.setItem("playlist", JSON.stringify(get().playlist));
   },
   removeFromPlaylist: (videoId) => {
     set({ playlist: get().playlist.filter((item) => item !== videoId) });
+    localStorage.setItem("playlist", JSON.stringify(get().playlist));
   },
 
   _extractYouTubeVideoId: (url) => {
@@ -74,5 +77,43 @@ export const useYoutubeStore = create<YoutubeStore>((set, get) => ({
     const match = url.match(videoIdRegex);
 
     return match ? match[1] : null;
+  },
+
+  _getYouTubeMetaData: async (videoId: string) => {
+    const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
+    try {
+      // Fetch the HTML of the YouTube video page
+      const response = await fetch(videoUrl);
+      const html = await response.text();
+
+      // Create a new DOM parser to parse the HTML
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+
+      // Extract Open Graph meta tags
+      const ogTitle = doc
+        .querySelector('meta[property="og:title"]')
+        ?.getAttribute("content");
+      const ogDescription = doc
+        .querySelector('meta[property="og:description"]')
+        ?.getAttribute("content");
+      const ogImage = doc
+        .querySelector('meta[property="og:image"]')
+        ?.getAttribute("content");
+      const ogUrl = doc
+        .querySelector('meta[property="og:url"]')
+        ?.getAttribute("content");
+
+      // Return the extracted metadata
+      const details = {
+        title: ogTitle,
+        description: ogDescription,
+        thumbnail: ogImage,
+        url: ogUrl,
+      };
+      console.log(details);
+    } catch (error) {
+      console.error("Error fetching video metadata:", error);
+    }
   },
 }));

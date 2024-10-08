@@ -19,13 +19,17 @@ function YoutubeCard({ mode, videoId }: YoutubeCardProps) {
             useYoutubeStore.getState().removeFromPlaylist(videoId)
         }
     }
+    function getVideoInfo() {
+        useYoutubeStore.getState()._getYouTubeMetaData(videoId)
+    }
 
     return (<div className=" w-full h-16 rounded-lg p-2 divide-y-4 divide-black/0 bg-black/50 text-white">
         <div onClick={watchAgain} className="bg-black/50 rounded-md cursor-pointer">
             <span className="font-bold">Video ID:</span>{" " + videoId}
         </div>
-        <div className="flex flex-row-reverse flex-start w-full">
+        <div className="flex flex-row-reverse flex-start w-full gap-2">
             <button onClick={removeVideo}>🗑️</button>
+            <button onClick={getVideoInfo}>ℹ️</button>
         </div>
     </div>);
 }
