@@ -54,8 +54,8 @@ export default function SharePage() {
                             <p>{data.url}</p>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <button onClick={playDirectly}>Play Directy</button>
-                            <button onClick={addToPlaylist}>Add To Playlist</button>
+                            <button onClick={playDirectly} className="px-2 text-white rounded-md bg-brand-main/50 border-2 border-black/50">Play Directy</button>
+                            <button onClick={addToPlaylist} className="px-2 text-white rounded-md bg-brand-main/50 border-2 border-black/50">Add To Playlist</button>
                         </div>
                     </>
                 ) : (
